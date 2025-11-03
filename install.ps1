@@ -1,22 +1,11 @@
+[CmdletBinding(SupportsShouldProcess = $true)]
 param(
-    [string]$DestinationRoot = "$env:ProgramFiles\WindowsPowerShell\Modules"
+    [ValidateSet('Auto', 'CurrentUser', 'AllUsers')]
+    [string]$Scope = 'Auto',
+
+    [switch]$Force
 )
 
-$moduleName = 'WinSysAuto'
-$sourcePath = Split-Path -Parent $MyInvocation.MyCommand.Path
-$destinationPath = Join-Path -Path $DestinationRoot -ChildPath $moduleName
-
-if (-not (Test-Path -Path $DestinationRoot)) {
-    New-Item -Path $DestinationRoot -ItemType Directory -Force | Out-Null
-}
-
-if (Test-Path -Path $destinationPath) {
-    Remove-Item -Path $destinationPath -Recurse -Force
-}
-
-Copy-Item -Path $sourcePath -Destination $destinationPath -Recurse -Force
-
-Write-Host "WinSysAuto installed to $destinationPath"
 function Resolve-ModuleRoot {
     [CmdletBinding()]
     param(
@@ -50,6 +39,7 @@ function Get-DestinationPath {
         [Parameter(Mandatory)]
         [ValidateSet('CurrentUser', 'AllUsers')]
         [string]$Scope,
+
         [Parameter(Mandatory)]
         [string]$ModuleName
     )
@@ -97,8 +87,10 @@ function Copy-ModuleContent {
     param(
         [Parameter(Mandatory)]
         [string]$Source,
+
         [Parameter(Mandatory)]
         [string]$Destination,
+
         [switch]$Force
     )
 
@@ -126,6 +118,7 @@ function Confirm-ChecksumsMatch {
     param(
         [Parameter(Mandatory)]
         [string]$Source,
+
         [Parameter(Mandatory)]
         [string]$Destination
     )
@@ -164,15 +157,19 @@ Write-Verbose "Running on PowerShell $($PSVersionTable.PSVersion)."
 $scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $moduleInfo = Resolve-ModuleRoot -BasePath $scriptRoot
 
-$isAdmin = Test-IsAdministrator
+$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
 switch ($Scope) {
     'Auto' {
         $effectiveScope = if ($isAdmin) { 'AllUsers' } else { 'CurrentUser' }
     }
-    default {
-        $effectiveScope = $Scope
-    }
+    'CurrentUser' { $effectiveScope = 'CurrentUser' }
+    'AllUsers' { $effectiveScope = 'AllUsers' }
+}
+
+if ([string]::IsNullOrWhiteSpace($effectiveScope) -or @('CurrentUser', 'AllUsers') -notcontains $effectiveScope) {
+    Write-Warning 'Unable to determine installation scope. Defaulting to CurrentUser.'
+    $effectiveScope = 'CurrentUser'
 }
 
 if ($effectiveScope -eq 'AllUsers' -and -not $isAdmin) {

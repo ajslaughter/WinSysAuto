@@ -12,6 +12,7 @@
     FunctionsToExport = @(
         'Get-Inventory',
         'Invoke-PatchScan',
+        'Get-SecurityBaseline',
         'Set-SecurityBaseline',
         'Watch-Health',
         'Export-InventoryReport'
@@ -24,6 +25,7 @@
         'WinSysAuto.psm1',
         'Functions/Get-Inventory.ps1',
         'Functions/Invoke-PatchScan.ps1',
+        'Functions/Get-SecurityBaseline.ps1',
         'Functions/Set-SecurityBaseline.ps1',
         'Functions/Watch-Health.ps1',
         'Functions/Export-InventoryReport.ps1'

@@ -13,18 +13,18 @@ Describe 'Export-InventoryReport' {
                 Last5Patches    = @([pscustomobject]@{ HotFixID = 'KB1'; InstalledOn = (Get-Date); Description = 'Patch' })
             }
         }
-        Mock -CommandName Test-Path -MockWith { $false }
-        Mock -CommandName New-Item
-        Mock -CommandName Set-Content
-        Mock -CommandName Get-Command -ParameterFilter { $Name -eq 'notepad.exe' } -MockWith { $null }
         Mock -CommandName Write-Host
     }
 
-    It 'creates the report and returns the path' {
-        $path = Export-InventoryReport -ComputerName 'TestHost' -OutputDirectory 'C:\\Reports'
-        $path | Should -Be 'C:\\Reports\\TestHost-Inventory.html'
-        Assert-MockCalled -CommandName New-Item -Times 1
-        Assert-MockCalled -CommandName Set-Content -Times 1
+    It 'creates the report and returns the file object' {
+        $outputDirectory = Join-Path -Path $TestDrive -ChildPath 'Reports'
+        $result = Export-InventoryReport -ComputerName 'TestHost' -OutputDirectory $outputDirectory
+
+        $result | Should -Not -BeNullOrEmpty
+        $result | Should -BeOfType 'System.IO.FileInfo'
+        $result.FullName | Should -Match 'TestHost-Inventory.html'
+        (Test-Path -LiteralPath $result.FullName) | Should -BeTrue
+
         Assert-MockCalled -CommandName Write-Host -Times 1
     }
 }

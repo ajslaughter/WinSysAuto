@@ -10,6 +10,7 @@ if (Test-Path -Path $functionsPath) {
 Export-ModuleMember -Function @(
     'Get-Inventory',
     'Invoke-PatchScan',
+    'Get-SecurityBaseline',
     'Set-SecurityBaseline',
     'Watch-Health',
     'Export-InventoryReport'
