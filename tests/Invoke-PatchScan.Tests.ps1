@@ -35,11 +35,30 @@ Describe 'Invoke-PatchScan' {
         }
     }
 
+    BeforeEach {
+        Mock -CommandName Get-Service -ParameterFilter { $Name -eq 'wuauserv' } -MockWith {
+            [pscustomobject]@{ Status = 'Running' }
+        }
+    }
+
     It 'returns pending updates from the searcher' {
         $result = Invoke-PatchScan
         $result | Should -Not -BeNullOrEmpty
         $result[0].KB | Should -Be 'KB123456'
         $result[0].Severity | Should -Be 'Critical'
         $result[0].Categories | Should -Be 'Security Updates'
+    }
+
+    It 'provides a helpful error when the Windows Update service is stopped' {
+        Mock -CommandName Get-Service -ParameterFilter { $Name -eq 'wuauserv' } -MockWith {
+            [pscustomobject]@{ Status = 'Stopped' }
+        }
+
+        Mock -CommandName Write-Error -MockWith {
+            param($Message)
+            throw $Message
+        }
+
+        { Invoke-PatchScan } | Should -Throw 'Windows Update service is not running. Start with: Start-Service wuauserv'
     }
 }

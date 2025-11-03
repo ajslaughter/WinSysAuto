@@ -1,23 +1,60 @@
 function Invoke-PatchScan {
     [CmdletBinding()]
     param(
-        [string]$Criteria = "IsInstalled=0 and Type='Software'"
+        [string]$Criteria = "IsInstalled=0 and Type='Software'",
+
+        [switch]$SkipConnectivityCheck
     )
 
     try {
-        $updateSession = New-Object -ComObject Microsoft.Update.Session
+        $service = Get-Service -Name 'wuauserv' -ErrorAction Stop
     }
     catch {
-        throw
+        Write-Error "Windows Update service is not available. $_"
+        return
     }
 
-    $searcher = $updateSession.CreateUpdateSearcher()
+    if ($service.Status -ne 'Running') {
+        Write-Error 'Windows Update service is not running. Start with: Start-Service wuauserv'
+        return
+    }
+
+    if (-not $SkipConnectivityCheck) {
+        $networkAvailable = [System.Net.NetworkInformation.NetworkInterface]::GetIsNetworkAvailable()
+        if (-not $networkAvailable) {
+            Write-Error 'Cannot connect to Windows Update servers. Check internet/WSUS connectivity'
+            return
+        }
+    }
+
+    try {
+        $updateSession = New-Object -ComObject Microsoft.Update.Session -ErrorAction Stop
+    }
+    catch {
+        Write-Error "Failed to initialize Windows Update session. $_"
+        return
+    }
+
+    try {
+        $searcher = $updateSession.CreateUpdateSearcher()
+    }
+    catch {
+        Write-Error "Failed to create Windows Update searcher. $_"
+        return
+    }
 
     try {
         $searchResult = $searcher.Search($Criteria)
     }
     catch {
-        throw
+        $hresult = $_.Exception.HResult
+        if ($hresult -eq -2145107924) {
+            Write-Error 'Windows Update client cannot connect to update servers'
+        }
+        else {
+            Write-Error "Cannot connect to Windows Update servers. Check internet/WSUS connectivity. $_"
+        }
+        return
     }
 
     $updates = @()

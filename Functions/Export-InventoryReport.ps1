@@ -1,13 +1,39 @@
+<#
+.SYNOPSIS
+Exports system inventory to HTML report
+
+.DESCRIPTION
+Generates a formatted HTML report containing system information including OS details,
+processors, disks, and recent patches. Uses Get-Inventory data.
+
+.PARAMETER ComputerName
+Target computer name. Defaults to local computer.
+
+.PARAMETER OutputDirectory
+Directory path where HTML report will be saved. Defaults to current directory.
+File will be named: {ComputerName}-Inventory.html
+
+.EXAMPLE
+Export-InventoryReport -OutputDirectory "C:\Reports"
+Generates inventory report for local computer in C:\Reports
+
+.EXAMPLE
+Export-InventoryReport -ComputerName "SERVER01" -OutputDirectory "C:\Reports"
+Generates inventory report for SERVER01 in C:\Reports
+
+.OUTPUTS
+System.IO.FileInfo - Returns the created HTML file object
+#>
 function Export-InventoryReport {
     [CmdletBinding()]
     param(
         [string]$ComputerName = $env:COMPUTERNAME,
-        [string]$OutputDirectory = 'C:\\Reports'
+        [string]$OutputDirectory = (Get-Location).Path
     )
 
     $inventory = Get-Inventory -ComputerName $ComputerName
 
-    if (-not (Test-Path -Path $OutputDirectory)) {
+    if (-not (Test-Path -LiteralPath $OutputDirectory)) {
         New-Item -Path $OutputDirectory -ItemType Directory -Force | Out-Null
     }
 
@@ -103,18 +129,8 @@ function Export-InventoryReport {
 
     Set-Content -Path $reportPath -Value $html -Encoding UTF8
 
-    $notepad = Get-Command -Name 'notepad.exe' -ErrorAction SilentlyContinue
-    if ($notepad) {
-        try {
-            Start-Process -FilePath $notepad.Source -ArgumentList $reportPath -ErrorAction Stop | Out-Null
-        }
-        catch {
-            Write-Host "Report saved to $reportPath"
-        }
-    }
-    else {
-        Write-Host "Report saved to $reportPath"
-    }
+    Write-Verbose "Inventory report saved to '$reportPath'."
+    Write-Host "Report saved to $reportPath"
 
-    return $reportPath
+    return Get-Item -LiteralPath $reportPath
 }
