@@ -443,6 +443,238 @@
         .panel:nth-child(4) { animation-delay: 0.6s; }
         .panel:nth-child(5) { animation-delay: 0.7s; }
         .panel:nth-child(6) { animation-delay: 0.8s; }
+
+        /* Controls Panel */
+        .controls-panel {
+            margin-bottom: 30px;
+            animation: slideIn 0.8s ease-out 0.2s backwards;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .control-section h3 {
+            font-size: 1.2em;
+            color: #ff00ff;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Action Buttons */
+        .action-btn {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
+            border: 2px solid #00ffff;
+            color: #00ffff;
+            padding: 12px 20px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            cursor: pointer;
+            clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+            transition: all 0.3s ease;
+            margin: 5px;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(255, 0, 255, 0.2));
+            border-color: #ff00ff;
+            color: #ff00ff;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5), inset 0 0 20px rgba(255, 0, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            border-color: #555;
+            color: #555;
+        }
+
+        .action-btn.danger {
+            border-color: #ff0000;
+            color: #ff0000;
+        }
+
+        .action-btn.danger:hover:not(:disabled) {
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(255, 100, 0, 0.2));
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5), inset 0 0 20px rgba(255, 0, 0, 0.1);
+        }
+
+        .action-btn.success {
+            border-color: #00ff00;
+            color: #00ff00;
+        }
+
+        .action-btn.success:hover:not(:disabled) {
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5), inset 0 0 20px rgba(0, 255, 0, 0.1);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            color: #00ffff;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00ffff;
+            color: #ffffff;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #ff00ff;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+
+        .form-checkbox {
+            margin-right: 8px;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            max-width: 400px;
+        }
+
+        .toast {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+            animation: slideInRight 0.3s ease-out;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.success {
+            border-color: #00ff00;
+        }
+
+        .toast.error {
+            border-color: #ff0000;
+        }
+
+        .toast.warning {
+            border-color: #ffff00;
+        }
+
+        .toast.info {
+            border-color: #00ffff;
+        }
+
+        .toast-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .toast.success .toast-title { color: #00ff00; }
+        .toast.error .toast-title { color: #ff0000; }
+        .toast.warning .toast-title { color: #ffff00; }
+        .toast.info .toast-title { color: #00ffff; }
+
+        .toast-message {
+            color: #ffffff;
+            font-size: 0.9em;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-top-color: #00ffff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Results Panel */
+        .results-panel {
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #00ffff;
+            padding: 15px;
+            margin-bottom: 15px;
+            clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .result-title {
+            color: #ff00ff;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .result-time {
+            color: #00ffff;
+            font-size: 0.85em;
+        }
+
+        .result-content {
+            color: #ffffff;
+            font-size: 0.9em;
+        }
+
+        .result-content pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            overflow-x: auto;
+            border-left: 2px solid #00ffff;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -455,6 +687,72 @@
         <div class="timestamp" id="timestamp">
             Last Updated: --
         </div>
+
+        <!-- Toast Container -->
+        <div class="toast-container" id="toastContainer"></div>
+
+        <!-- Controls Panel -->
+        <div class="controls-panel">
+            <div class="panel">
+                <h2>◢ Control Center ◣</h2>
+                <div class="controls-grid">
+                    <!-- Environment Section -->
+                    <div class="control-section">
+                        <h3>◢ Environment ◣</h3>
+                        <button class="action-btn" id="btnInitEnv">Initialize Environment</button>
+                    </div>
+
+                    <!-- Health Section -->
+                    <div class="control-section">
+                        <h3>◢ Health Check ◣</h3>
+                        <button class="action-btn success" id="btnRefreshHealth">Refresh Health</button>
+                    </div>
+
+                    <!-- Backup Section -->
+                    <div class="control-section">
+                        <h3>◢ Backup ◣</h3>
+                        <button class="action-btn" id="btnBackup">Run Backup</button>
+                    </div>
+
+                    <!-- Security Baseline Section -->
+                    <div class="control-section">
+                        <h3>◢ Security Baseline ◣</h3>
+                        <button class="action-btn" id="btnAuditBaseline">Audit Baseline</button>
+                        <button class="action-btn danger" id="btnEnforceBaseline">Enforce Baseline</button>
+                    </div>
+
+                    <!-- Bulk Users Section -->
+                    <div class="control-section">
+                        <h3>◢ Bulk User Creation ◣</h3>
+                        <div class="form-group">
+                            <label class="form-label">CSV File:</label>
+                            <input type="file" class="form-input" id="csvFile" accept=".csv">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Default OU (optional):</label>
+                            <input type="text" class="form-input" id="defaultOU" placeholder="OU=Users,DC=example,DC=com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Groups Mode:</label>
+                            <select class="form-select" id="groupsMode">
+                                <option value="Append">Append</option>
+                                <option value="Replace">Replace</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" class="form-checkbox" id="resetPasswords">
+                                Reset Passwords
+                            </label>
+                        </div>
+                        <button class="action-btn" id="btnCreateUsers">Create Users</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel" id="resultsPanel"></div>
 
         <div class="health-score-container">
             <div class="health-score" id="healthScore">
@@ -553,6 +851,95 @@
 
     <script>
         let refreshInterval = null;
+        let isActionRunning = false;
+
+        // API Helper Function
+        async function callApi(path, body = {}, isMultipart = false) {
+            const headers = {};
+            if (!isMultipart) {
+                headers['Content-Type'] = 'application/json';
+            }
+            if (window.WSA_AUTH_TOKEN) {
+                headers['X-Auth-Token'] = window.WSA_AUTH_TOKEN;
+            }
+
+            try {
+                const response = await fetch(path, {
+                    method: 'POST',
+                    headers: headers,
+                    body: isMultipart ? body : JSON.stringify(body)
+                });
+                return await response.json();
+            } catch (error) {
+                return {
+                    ok: false,
+                    message: 'Network error',
+                    error: {
+                        type: 'NetworkError',
+                        details: error.message
+                    }
+                };
+            }
+        }
+
+        // Toast Notification Function
+        function showToast(title, message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+            `;
+            container.appendChild(toast);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        }
+
+        // Add Result Card
+        function addResult(title, content, isSuccess = true) {
+            const resultsPanel = document.getElementById('resultsPanel');
+            const resultCard = document.createElement('div');
+            resultCard.className = 'result-card';
+            resultCard.style.borderColor = isSuccess ? '#00ff00' : '#ff0000';
+            resultCard.innerHTML = `
+                <div class="result-header">
+                    <div class="result-title">${title}</div>
+                    <div class="result-time">${new Date().toLocaleString()}</div>
+                </div>
+                <div class="result-content">
+                    ${typeof content === 'object' ? `<pre>${JSON.stringify(content, null, 2)}</pre>` : content}
+                </div>
+            `;
+            resultsPanel.insertBefore(resultCard, resultsPanel.firstChild);
+
+            // Limit to 10 results
+            while (resultsPanel.children.length > 10) {
+                resultsPanel.removeChild(resultsPanel.lastChild);
+            }
+        }
+
+        // Disable/Enable All Action Buttons
+        function setButtonsDisabled(disabled) {
+            isActionRunning = disabled;
+            document.querySelectorAll('.action-btn').forEach(btn => {
+                btn.disabled = disabled;
+            });
+        }
+
+        // Add Spinner to Button
+        function setButtonLoading(button, loading) {
+            if (loading) {
+                button.dataset.originalText = button.textContent;
+                button.innerHTML = button.textContent + '<span class="spinner"></span>';
+            } else {
+                button.innerHTML = button.dataset.originalText || button.textContent.replace(/<span.*<\/span>/, '');
+            }
+        }
 
         function updateDashboard() {
             fetch('/api/health')
@@ -679,6 +1066,195 @@
         window.addEventListener('beforeunload', () => {
             if (refreshInterval) {
                 clearInterval(refreshInterval);
+            }
+        });
+
+        // Action Button Event Listeners
+
+        // Initialize Environment
+        document.getElementById('btnInitEnv').addEventListener('click', async () => {
+            if (isActionRunning) return;
+            if (!confirm('Initialize WinSysAuto environment? This will detect domain configuration and create necessary directories.')) return;
+
+            const button = document.getElementById('btnInitEnv');
+            setButtonsDisabled(true);
+            setButtonLoading(button, true);
+
+            try {
+                const result = await callApi('/api/action/init-environment', { force: false });
+                if (result.ok) {
+                    showToast('Success', result.message, 'success');
+                    addResult('Environment Initialized', result, true);
+                } else {
+                    showToast('Error', result.message, 'error');
+                    addResult('Environment Initialization Failed', result, false);
+                }
+            } catch (error) {
+                showToast('Error', error.message, 'error');
+            } finally {
+                setButtonLoading(button, false);
+                setButtonsDisabled(false);
+            }
+        });
+
+        // Refresh Health
+        document.getElementById('btnRefreshHealth').addEventListener('click', async () => {
+            if (isActionRunning) return;
+
+            const button = document.getElementById('btnRefreshHealth');
+            setButtonsDisabled(true);
+            setButtonLoading(button, true);
+
+            try {
+                const result = await callApi('/api/action/health', {});
+                if (result.ok) {
+                    showToast('Success', 'Health check completed', 'success');
+                    addResult('Health Check Complete', result, true);
+                    // Update dashboard immediately with new health data
+                    updateDashboard();
+                } else {
+                    showToast('Error', result.message, 'error');
+                    addResult('Health Check Failed', result, false);
+                }
+            } catch (error) {
+                showToast('Error', error.message, 'error');
+            } finally {
+                setButtonLoading(button, false);
+                setButtonsDisabled(false);
+            }
+        });
+
+        // Run Backup
+        document.getElementById('btnBackup').addEventListener('click', async () => {
+            if (isActionRunning) return;
+            if (!confirm('Create a backup archive of configuration data?')) return;
+
+            const button = document.getElementById('btnBackup');
+            setButtonsDisabled(true);
+            setButtonLoading(button, true);
+
+            try {
+                const result = await callApi('/api/action/backup', { note: 'Manual backup from dashboard' });
+                if (result.ok) {
+                    showToast('Success', `Backup created: ${result.backupPath}`, 'success');
+                    addResult('Backup Complete', result, true);
+                } else {
+                    showToast('Error', result.message, 'error');
+                    addResult('Backup Failed', result, false);
+                }
+            } catch (error) {
+                showToast('Error', error.message, 'error');
+            } finally {
+                setButtonLoading(button, false);
+                setButtonsDisabled(false);
+            }
+        });
+
+        // Audit Baseline
+        document.getElementById('btnAuditBaseline').addEventListener('click', async () => {
+            if (isActionRunning) return;
+
+            const button = document.getElementById('btnAuditBaseline');
+            setButtonsDisabled(true);
+            setButtonLoading(button, true);
+
+            try {
+                const result = await callApi('/api/action/security-baseline', { mode: 'Audit' });
+                if (result.ok) {
+                    showToast('Success', result.summary || 'Audit completed', 'success');
+                    addResult('Security Baseline Audit', result, true);
+                } else {
+                    showToast('Error', result.message, 'error');
+                    addResult('Security Baseline Audit Failed', result, false);
+                }
+            } catch (error) {
+                showToast('Error', error.message, 'error');
+            } finally {
+                setButtonLoading(button, false);
+                setButtonsDisabled(false);
+            }
+        });
+
+        // Enforce Baseline
+        document.getElementById('btnEnforceBaseline').addEventListener('click', async () => {
+            if (isActionRunning) return;
+            if (!confirm('ENFORCE security baseline? This will make system changes. Continue?')) return;
+
+            const button = document.getElementById('btnEnforceBaseline');
+            setButtonsDisabled(true);
+            setButtonLoading(button, true);
+
+            try {
+                const result = await callApi('/api/action/security-baseline', { mode: 'Enforce' });
+                if (result.ok) {
+                    showToast('Success', result.summary || 'Enforcement completed', 'success');
+                    addResult('Security Baseline Enforced', result, true);
+                } else {
+                    showToast('Error', result.message, 'error');
+                    addResult('Security Baseline Enforcement Failed', result, false);
+                }
+            } catch (error) {
+                showToast('Error', error.message, 'error');
+            } finally {
+                setButtonLoading(button, false);
+                setButtonsDisabled(false);
+            }
+        });
+
+        // Create Users
+        document.getElementById('btnCreateUsers').addEventListener('click', async () => {
+            if (isActionRunning) return;
+
+            const fileInput = document.getElementById('csvFile');
+            const defaultOU = document.getElementById('defaultOU').value;
+            const groupsMode = document.getElementById('groupsMode').value;
+            const resetPasswords = document.getElementById('resetPasswords').checked;
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                showToast('Error', 'Please select a CSV file', 'error');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            if (file.size > 2 * 1024 * 1024) {
+                showToast('Error', 'File size exceeds 2 MB limit', 'error');
+                return;
+            }
+
+            if (!file.name.endsWith('.csv')) {
+                showToast('Error', 'Please select a CSV file', 'error');
+                return;
+            }
+
+            if (!confirm(`Create users from ${file.name}?`)) return;
+
+            const button = document.getElementById('btnCreateUsers');
+            setButtonsDisabled(true);
+            setButtonLoading(button, true);
+
+            try {
+                // Create FormData for multipart upload
+                const formData = new FormData();
+                formData.append('file', file);
+                if (defaultOU) formData.append('defaultOU', defaultOU);
+                formData.append('groupsMode', groupsMode);
+                formData.append('resetPasswords', resetPasswords.toString());
+
+                const result = await callApi('/api/action/new-users', formData, true);
+                if (result.ok) {
+                    showToast('Success', `Created: ${result.created}, Skipped: ${result.skipped}`, 'success');
+                    addResult('Users Created', result, true);
+                    // Clear the file input
+                    fileInput.value = '';
+                } else {
+                    showToast('Error', result.message, 'error');
+                    addResult('User Creation Failed', result, false);
+                }
+            } catch (error) {
+                showToast('Error', error.message, 'error');
+            } finally {
+                setButtonLoading(button, false);
+                setButtonsDisabled(false);
             }
         });
     </script>
