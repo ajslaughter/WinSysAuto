@@ -585,6 +585,134 @@ function Start-WsaDashboard {
                                         $duration = ((Get-Date) - $startTime).TotalMilliseconds
                                         Write-DashboardLog -Route $actionPath -Success $false -DurationMs $duration -Error $_.Exception.Message
                                     }
+                                    }
+                                }
+
+                                '/api/action/service-control' {
+                                    # Check admin rights
+                                    if (-not (Test-AdminRights)) {
+                                        $responseData = @{ ok = $false; message = "Admin privileges required"; error = @{ type = "InsufficientPrivileges"; details = "Service control requires admin rights" } }
+                                        Send-JsonResponse -Response $response -Data $responseData -StatusCode 200
+                                        return
+                                    }
+
+                                    $body = Read-JsonRequest -Request $request
+                                    $serviceName = $body.name
+                                    $action = $body.action # Restart, Start, Stop
+
+                                    if (-not $serviceName) {
+                                        throw "Service name is required"
+                                    }
+
+                                    try {
+                                        $svc = Get-Service -Name $serviceName -ErrorAction Stop
+                                        if ($action -eq 'Restart') {
+                                            Restart-Service -Name $serviceName -Force -ErrorAction Stop
+                                            $msg = "Service $serviceName restarted successfully"
+                                        }
+                                        elseif ($action -eq 'Start') {
+                                            Start-Service -Name $serviceName -ErrorAction Stop
+                                            $msg = "Service $serviceName started successfully"
+                                        }
+                                        elseif ($action -eq 'Stop') {
+                                            Stop-Service -Name $serviceName -Force -ErrorAction Stop
+                                            $msg = "Service $serviceName stopped successfully"
+                                        }
+                                        else {
+                                            throw "Invalid action: $action"
+                                        }
+
+                                        $responseData = @{ ok = $true; message = $msg }
+                                        Send-JsonResponse -Response $response -Data $responseData
+                                        $duration = ((Get-Date) - $startTime).TotalMilliseconds
+                                        Write-DashboardLog -Route $actionPath -Success $true -DurationMs $duration
+                                    }
+                                    catch {
+                                        $responseData = @{ ok = $false; message = "Service action failed"; error = @{ type = $_.Exception.GetType().Name; details = $_.Exception.Message } }
+                                        Send-JsonResponse -Response $response -Data $responseData -StatusCode 200
+                                        $duration = ((Get-Date) - $startTime).TotalMilliseconds
+                                        Write-DashboardLog -Route $actionPath -Success $false -DurationMs $duration -Error $_.Exception.Message
+                                    }
+                                }
+
+                                '/api/action/drift' {
+                                    try {
+                                        $result = Get-WsaDrift
+                                        $responseData = @{ ok = $true; message = "Drift check completed"; data = $result }
+                                        Send-JsonResponse -Response $response -Data $responseData
+                                        $duration = ((Get-Date) - $startTime).TotalMilliseconds
+                                        Write-DashboardLog -Route $actionPath -Success $true -DurationMs $duration
+                                    }
+                                    catch {
+                                        $responseData = @{ ok = $false; message = "Drift check failed"; error = @{ type = $_.Exception.GetType().Name; details = $_.Exception.Message } }
+                                        Send-JsonResponse -Response $response -Data $responseData -StatusCode 200
+                                        $duration = ((Get-Date) - $startTime).TotalMilliseconds
+                                        Write-DashboardLog -Route $actionPath -Success $false -DurationMs $duration -Error $_.Exception.Message
+                                    }
+                                }
+
+                                '/api/action/user-operation' {
+                                    # Check AD module
+                                    if (-not (Get-Module -Name ActiveDirectory -ListAvailable)) {
+                                        $responseData = @{ ok = $false; message = "AD module not available"; error = @{ type = "ModuleMissing"; details = "ActiveDirectory module is required" } }
+                                        Send-JsonResponse -Response $response -Data $responseData -StatusCode 200
+                                        return
+                                    }
+                                    # Check admin rights
+                                    if (-not (Test-AdminRights)) {
+                                        $responseData = @{ ok = $false; message = "Admin privileges required"; error = @{ type = "InsufficientPrivileges"; details = "User management requires admin rights" } }
+                                        Send-JsonResponse -Response $response -Data $responseData -StatusCode 200
+                                        return
+                                    }
+
+                                    $body = Read-JsonRequest -Request $request
+                                    $operation = $body.operation # Create, Unlock, Reset
+                                    $username = $body.username
+
+                                    if (-not $username) { throw "Username is required" }
+
+                                    try {
+                                        if ($operation -eq 'Unlock') {
+                                            Unlock-ADAccount -Identity $username -ErrorAction Stop
+                                            $msg = "User $username unlocked successfully"
+                                        }
+                                        elseif ($operation -eq 'Reset') {
+                                            if (-not $body.password) { throw "Password is required for reset" }
+                                            $securePass = ConvertTo-SecureString -String $body.password -AsPlainText -Force
+                                            Set-ADAccountPassword -Identity $username -NewPassword $securePass -Reset -ErrorAction Stop
+                                            $msg = "Password for $username reset successfully"
+                                        }
+                                        elseif ($operation -eq 'Create') {
+                                            # Simple single user creation
+                                            $params = @{
+                                                SamAccountName = $username
+                                                Name = "$($body.firstname) $($body.lastname)"
+                                                GivenName = $body.firstname
+                                                Surname = $body.lastname
+                                                DisplayName = "$($body.firstname) $($body.lastname)"
+                                                UserPrincipalName = "$username@$((Get-ADDomain).DNSRoot)"
+                                                AccountPassword = (ConvertTo-SecureString -String $body.password -AsPlainText -Force)
+                                                Enabled = $true
+                                                Path = if ($body.ou) { $body.ou } else { "CN=Users,$((Get-ADDomain).DistinguishedName)" }
+                                            }
+                                            New-ADUser @params -ErrorAction Stop
+                                            $msg = "User $username created successfully"
+                                        }
+                                        else {
+                                            throw "Invalid operation: $operation"
+                                        }
+
+                                        $responseData = @{ ok = $true; message = $msg }
+                                        Send-JsonResponse -Response $response -Data $responseData
+                                        $duration = ((Get-Date) - $startTime).TotalMilliseconds
+                                        Write-DashboardLog -Route $actionPath -Success $true -DurationMs $duration
+                                    }
+                                    catch {
+                                        $responseData = @{ ok = $false; message = "User operation failed"; error = @{ type = $_.Exception.GetType().Name; details = $_.Exception.Message } }
+                                        Send-JsonResponse -Response $response -Data $responseData -StatusCode 200
+                                        $duration = ((Get-Date) - $startTime).TotalMilliseconds
+                                        Write-DashboardLog -Route $actionPath -Success $false -DurationMs $duration -Error $_.Exception.Message
+                                    }
                                 }
 
                                 default {

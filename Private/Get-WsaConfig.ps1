@@ -29,7 +29,7 @@ function Get-WsaConfig {
     )
 
     # Determine config path
-    if (-not $ConfigPath) {
+    if ([string]::IsNullOrWhiteSpace($ConfigPath)) {
         $configRoot = Join-Path -Path $env:ProgramData -ChildPath 'WinSysAuto'
         $ConfigPath = Join-Path -Path $configRoot -ChildPath 'config.json'
     }
@@ -61,7 +61,11 @@ function Get-WsaConfig {
 
     # Load and return config
     try {
-        $config = Get-Content -Path $ConfigPath -Raw -ErrorAction Stop | ConvertFrom-Json
+        $content = Get-Content -Path $ConfigPath -Raw -ErrorAction Stop
+        if ([string]::IsNullOrWhiteSpace($content)) {
+            throw "Configuration file is empty."
+        }
+        $config = $content | ConvertFrom-Json
         Write-Verbose "Loaded configuration from $ConfigPath"
         return $config
     }
@@ -70,7 +74,7 @@ function Get-WsaConfig {
             throw "Failed to load configuration from $ConfigPath: $($_.Exception.Message)"
         }
 
-        Write-Warning "Failed to load configuration from $ConfigPath. Using default configuration."
+        Write-Warning "Failed to load configuration from $ConfigPath. Using default configuration. Error: $($_.Exception.Message)"
         return [PSCustomObject]@{
             initialized = $null
             computerName = $env:COMPUTERNAME

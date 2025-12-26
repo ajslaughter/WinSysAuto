@@ -352,6 +352,14 @@ function Get-WsaDashboardData {
             firewall = $firewallEnabled
         }
         alerts = $alerts
+        environment = @{
+            isDomainJoined = $config.isDomainJoined
+            isDomainController = $config.isDomainController
+            hasAdModule = $config.hasAdModule
+            hasDhcpModule = $config.hasDhcpModule
+            hasDnsModule = $config.hasDnsModule
+            domain = $config.domain
+        }
     }
 
     return [pscustomobject]$data

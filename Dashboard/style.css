@@ -40,9 +40,12 @@
     /* Text */
     /* Text - High Contrast for Accessibility */
     --text-primary: #ffffff;
-    --text-secondary: #e5e7eb; /* Lighter gray for better contrast */
-    --text-muted: #9ca3af;    /* Previous secondary color */
-    --text-dim: #6b7280;      /* Previous muted color */
+    --text-secondary: #e5e7eb;
+    /* Lighter gray for better contrast */
+    --text-muted: #9ca3af;
+    /* Previous secondary color */
+    --text-dim: #6b7280;
+    /* Previous muted color */
 
     /* Shadows & Glows */
     --glow-cyan: 0 0 20px rgba(0, 217, 255, 0.3);
@@ -86,7 +89,9 @@
 /* ===================================================================
    Global Resets & Base Styles
    =================================================================== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -123,16 +128,32 @@ body::before {
     z-index: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     margin: 0;
     font-weight: var(--font-weight-semibold);
     line-height: 1.2;
 }
 
-h1 { font-size: var(--font-size-2xl); }
-h2 { font-size: var(--font-size-xl); }
-h3 { font-size: var(--font-size-lg); }
-h4 { font-size: var(--font-size-md); }
+h1 {
+    font-size: var(--font-size-2xl);
+}
+
+h2 {
+    font-size: var(--font-size-xl);
+}
+
+h3 {
+    font-size: var(--font-size-lg);
+}
+
+h4 {
+    font-size: var(--font-size-md);
+}
 
 button {
     font-family: inherit;
@@ -141,7 +162,9 @@ button {
     background: none;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
     font-family: inherit;
     font-size: var(--font-size-base);
 }
@@ -296,8 +319,13 @@ input, select, textarea {
 }
 
 @keyframes shimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
 }
 
 .header-content {
@@ -873,8 +901,13 @@ section {
 }
 
 @keyframes shimmer-progress {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
 }
 
 .progress-fill.warning {
@@ -961,8 +994,15 @@ section {
 }
 
 @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
 }
 
 .service-icon.running {
@@ -1134,6 +1174,7 @@ section {
         transform: translateX(400px);
         opacity: 0;
     }
+
     to {
         transform: translateX(0);
         opacity: 1;
@@ -1233,8 +1274,13 @@ section {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .modal-content {
@@ -1256,6 +1302,7 @@ section {
         transform: translateY(50px);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -1411,7 +1458,9 @@ section {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* ===================================================================
@@ -1496,6 +1545,191 @@ section {
    Accessibility
    =================================================================== */
 @media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus Visible */
+*:focus-visible {
+    outline: 2px solid var(--accent-cyan);
+    outline-offset: 2px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .border {
+        border-width: 2px;
+    }
+}
+
+/* ===================================================================
+   Scrollbar Styling
+   =================================================================== */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--accent-cyan), var(--accent-purple));
+    border-radius: 6px;
+    border: 2px solid var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-cyan);
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: rgba(245, 158, 11, 0.1);
+    border-left: 4px solid var(--warning);
+    border-radius: var(--radius);
+    margin-bottom: var(--spacing-lg);
+}
+
+.warning-box svg {
+    flex-shrink: 0;
+    color: var(--warning);
+}
+
+.info-list {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.info-list ul {
+    margin: var(--spacing-sm) 0 var(--spacing-md) var(--spacing-lg);
+}
+
+.info-list li {
+    margin-bottom: var(--spacing-xs);
+}
+
+/* Progress Modal */
+.progress-info {
+    text-align: center;
+    padding: var(--spacing-xl);
+}
+
+.progress-info h3 {
+    margin: var(--spacing-lg) 0 var(--spacing-md);
+}
+
+.progress-info p {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin-top: var(--spacing-sm);
+}
+
+.spinner-large {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto;
+    border: 4px solid var(--bg-card);
+    border-top-color: var(--accent-cyan);
+    border-bottom-color: var(--accent-purple);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ===================================================================
+   Utility Classes
+   =================================================================== */
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-left: var(--spacing-sm);
+    border: 2px solid var(--bg-card);
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+}
+
+/* ===================================================================
+   Loading States
+   =================================================================== */
+.btn-loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+/* ===================================================================
+   Responsive Design
+   =================================================================== */
+@media (max-width: 1200px) {
+    .health-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .health-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .resource-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .domain-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+
+    .separator {
+        display: none;
+    }
+
+    .settings-sidebar {
+        width: 100%;
+        right: -100%;
+    }
+
+    .toast-container {
+        left: 20px;
+        right: 20px;
+        max-width: none;
+    }
+}
+
+/* ===================================================================
+   Accessibility
+   =================================================================== */
+@media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {
@@ -1554,4 +1788,136 @@ section {
     .modal {
         display: none !important;
     }
+}
+
+/* ===================================================================
+   New Widget Styles
+   =================================================================== */
+
+/* Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--bg-elevated);
+    transition: .4s;
+    border: 1px solid var(--glass-border);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 3px;
+    background-color: var(--text-secondary);
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: var(--accent-cyan);
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px var(--accent-cyan);
+}
+
+input:checked+.slider:before {
+    transform: translateX(26px);
+    background-color: white;
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.toggle-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-md);
+    background: var(--bg-card);
+    border-radius: var(--radius);
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: var(--spacing-sm);
+}
+
+.tab-btn {
+    padding: 8px 16px;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all var(--transition-fast);
+}
+
+.tab-btn:hover {
+    color: var(--accent-cyan);
+}
+
+.tab-btn.active {
+    color: var(--accent-cyan);
+    border-bottom-color: var(--accent-cyan);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Drift List */
+.drift-list {
+    min-height: 60px;
+}
+
+.drift-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    background: var(--bg-card);
+    border-left: 3px solid var(--info);
+    border-radius: var(--radius);
+}
+
+.drift-item.warning {
+    border-left-color: var(--warning);
+}
+
+.drift-message {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+}
+
+.drift-time {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    font-family: var(--font-family-mono);
 }
